@@ -43,8 +43,13 @@ const cl = k => CROPS[k][0] + ' ' + lb(CROPS, k), wl = k => WORKS[k][0] + ' ' + 
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 // ---------- locations (sample) ----------
 const LOC = {
-  'Andhra Pradesh': { Guntur: { 'Guntur Rural': ['Chowdavaram', 'Nallapadu'], Pedakakani: ['Pedakakani', 'Kanaparru'] }, Krishna: { 'Vijayawada Rural': ['Nunna', 'Gollapudi'], Machilipatnam: ['Chilakalapudi'] } },
+  'Andhra Pradesh': { Guntur: { 'Guntur Rural': ['Chowdavaram', 'Nallapadu'], Pedakakani: ['Pedakakani', 'Kanaparru'] }, Krishna: { 'Vijayawada Rural': ['Nunna', 'Gollapudi'], Machilipatnam: ['Chilakalapudi'] },Prakasam: { 'Maddipadu': ['Gundlapalli', 'Ghadiyapudi'],'Ongole':['Kothapatnam','Valluru']} },
   Telangana: { Warangal: { Hanamkonda: ['Kazipet', 'Madikonda'] }, Nizamabad: { Armoor: ['Mamidipally'] }, Khammam: { 'Khammam Rural': ['Ekunuru'] } }
+   'Tamil Nadu':{kochi:{jk:['f','g']}},
+   'Kerala':{},
+   'Karnataka':{},
+   'Maharashtra':{},
+   'Madhya Pradesh':{}
 };
 const LK = ['state', 'district', 'mandal', 'village'];
 function locList(k, v) { if (k === 'state') return Object.keys(LOC); let o = LOC[v.state]; if (!o) return []; if (k === 'district') return Object.keys(o); o = o[v.district]; if (!o) return []; return k === 'mandal' ? Object.keys(o) : (o[v.mandal] || []); }
