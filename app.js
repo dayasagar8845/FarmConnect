@@ -44,7 +44,7 @@ const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': 
 // ---------- locations (sample) ----------
 const LOC = {
   'Andhra Pradesh': { Guntur: { 'Guntur Rural': ['Chowdavaram', 'Nallapadu'], Pedakakani: ['Pedakakani', 'Kanaparru'] }, Krishna: { 'Vijayawada Rural': ['Nunna', 'Gollapudi'], Machilipatnam: ['Chilakalapudi'] },Prakasam: { 'Maddipadu': ['Gundlapalli', 'Ghadiyapudi'],'Ongole':['Kothapatnam','Valluru']} },
-  Telangana: { Warangal: { Hanamkonda: ['Kazipet', 'Madikonda'] }, Nizamabad: { Armoor: ['Mamidipally'] }, Khammam: { 'Khammam Rural': ['Ekunuru'] } }
+  Telangana: { Warangal: { Hanamkonda: ['Kazipet', 'Madikonda'] }, Nizamabad: { Armoor: ['Mamidipally'] }, Khammam: { 'Khammam Rural': ['Ekunuru'] } },
    'Tamil Nadu':{kochi:{jk:['f','g']}},
    'Kerala':{},
    'Karnataka':{},
