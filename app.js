@@ -43,13 +43,8 @@ const cl = k => CROPS[k][0] + ' ' + lb(CROPS, k), wl = k => WORKS[k][0] + ' ' + 
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 // ---------- locations (sample) ----------
 const LOC = {
-  'Andhra Pradesh': { Guntur: { 'Guntur Rural': ['Chowdavaram', 'Nallapadu'], Pedakakani: ['Pedakakani', 'Kanaparru'] }, Krishna: { 'Vijayawada Rural': ['Nunna', 'Gollapudi'], Machilipatnam: ['Chilakalapudi'] },Prakasam: { 'Maddipadu': ['Gundlapalli', 'Ghadiyapudi'],'Ongole':['Kothapatnam','Valluru']} },
-  Telangana: { Warangal: { Hanamkonda: ['Kazipet', 'Madikonda'] }, Nizamabad: { Armoor: ['Mamidipally'] }, Khammam: { 'Khammam Rural': ['Ekunuru'] } },
-   'Tamil Nadu':{kochi:{jk:['f','g']}},
-   'Kerala':{},
-   'Karnataka':{},
-   'Maharashtra':{},
-   'Madhya Pradesh':{}
+  'Andhra Pradesh': { Guntur: { 'Guntur Rural': ['Chowdavaram', 'Nallapadu'], Pedakakani: ['Pedakakani', 'Kanaparru'] }, Krishna: { 'Vijayawada Rural': ['Nunna', 'Gollapudi'], Machilipatnam: ['Chilakalapudi'] } },
+  Telangana: { Warangal: { Hanamkonda: ['Kazipet', 'Madikonda'] }, Nizamabad: { Armoor: ['Mamidipally'] }, Khammam: { 'Khammam Rural': ['Ekunuru'] } }
 };
 const LK = ['state', 'district', 'mandal', 'village'];
 function locList(k, v) { if (k === 'state') return Object.keys(LOC); let o = LOC[v.state]; if (!o) return []; if (k === 'district') return Object.keys(o); o = o[v.district]; if (!o) return []; return k === 'mandal' ? Object.keys(o) : (o[v.mandal] || []); }
@@ -95,8 +90,8 @@ V.home = () => `<section class="hero"><h1>${t('heroT')}</h1><p>${t('heroS')}</p>
 <div class="grid"><div class="card big"><span class="ic">👨‍🌾</span><h2>${t('farmer')}</h2><p>${t('needW')}</p><button class="btn" data-go="auth" data-a="farmer:login">${t('flogin')}</button></div>
 <div class="card big"><span class="ic">👷</span><h2>${t('labourer')}</h2><p>${t('needJ')}</p><button class="btn" data-go="auth" data-a="labourer:login">${t('llogin')}</button></div></div>
 <p class="note" style="text-align:center"><a href="#" data-go="auth" data-a="admin:login">${t('admin')}</a></p>`;
-V.how = () => `<div class="card"><h2>❓ ${t('how')}</h2><p>${t('h1')}</p><p>${t('h2')}</p><p>${t('h3')}</p></div>`;
-V.about = () => `<div class="card"><h2>🌾 ${t('about')}</h2><p>${t('aboutT')}</p></div>`;
+V.how = () => back('home') + `<div class="card"><h2>❓ ${t('how')}</h2><p>${t('h1')}</p><p>${t('h2')}</p><p>${t('h3')}</p></div>`;
+V.about = () => back('home') + `<div class="card"><h2>🌾 ${t('about')}</h2><p>${t('aboutT')}</p></div>`;
 const pwField = (n, l) => `<label>🔢 ${t(l)}<div class="pw"><input name="${n}" type="password" inputmode="numeric" pattern="\\d{4}" maxlength="4" placeholder="_ _ _ _" autocomplete="off" required><button type="button" data-do="eye" aria-label="Show/hide">👁️</button></div></label>`;
 V.auth = () => {
   const [role, mode] = arg.split(':'), ic = role === 'farmer' ? '👨‍🌾' : role === 'labourer' ? '👷' : '🛠️', sign = mode === 'signup';
@@ -106,7 +101,7 @@ V.auth = () => {
 <label>⭐ ${t('exp')}<input name="experience" type="number" inputmode="numeric" min="0" max="60" required></label>
 <label>💰 ${t('myWage')} (₹)<input name="expectedWage" type="number" inputmode="numeric" value="500" required></label>
 <label>🕒 ${t('avail')}<select name="availability">${['today', 'tomorrow', 'week'].map(k => `<option value="${k}">${t(k)}</option>`).join('')}</select></label>`;
-  return `<div class="card"><h2>${ic} ${sign ? t(role === 'farmer' ? 'regF' : 'regL') : t(role === 'farmer' ? 'flogin' : role === 'labourer' ? 'llogin' : 'admin')}</h2><div id="msg"></div>
+  return back('home') + `<div class="card"><h2>${ic} ${sign ? t(role === 'farmer' ? 'regF' : 'regL') : t(role === 'farmer' ? 'flogin' : role === 'labourer' ? 'llogin' : 'admin')}</h2><div id="msg"></div>
 <form data-f="${sign ? 'signup' : 'login'}" data-role="${role}">
 ${sign ? `<label>👤 ${t('name')}<input name="name" required></label>` : ''}
 <label>📱 ${t('phone')}<input name="phone" type="tel" inputmode="numeric" maxlength="10" placeholder="${t('errPhone')}" required></label>
@@ -120,7 +115,7 @@ const TILES = {
   labourer: [['🔎', 'findW', 'find'], ['🌾', 'availJ', 'jobs'], ['📍', 'nearJ', 'near'], ['✅', 'myAcc', 'myacc'], ['💰', 'myWage', 'wage'], ['👤', 'myProf', 'profile']]
 };
 V.dash = () => `<h1>${me.role === 'farmer' ? '👨‍🌾' : '👷'} ${t('welcome')}, ${esc(user().name)}</h1><div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(150px,1fr))">${TILES[me.role].map(([i, k, v]) => `<button class="tile" data-go="${v}"><span class="ic">${i}</span>${t(k)}</button>`).join('')}</div>`;
-V.post = () => { const u = user(); return `<div class="card"><h2>📋 ${t('postWork')}</h2><p>${t('instr')}</p><div id="msg"></div>
+V.post = () => { const u = user(); return back() + `<div class="card"><h2>📋 ${t('postWork')}</h2><p>${t('instr')}</p><div id="msg"></div>
 <form data-f="post"><label>🌾 ${t('crop')}<select name="crop">${Object.keys(CROPS).map(k => `<option value="${k}">${cl(k)}</option>`).join('')}</select></label>
 <label>🛠️ ${t('workType')}<select name="workType">${Object.keys(WORKS).map(k => `<option value="${k}">${wl(k)}</option>`).join('')}</select></label>
 <label>👷 ${t('need')}</label><div class="cnt"><button type="button" data-do="cnt" data-a="-1" aria-label="-">−</button><b id="cn">1</b><button type="button" data-do="cnt" data-a="1" aria-label="+">+</button></div><input type="hidden" name="labourersRequired" value="1">
@@ -163,7 +158,7 @@ V.notifs = () => { const ns = db.notifs.filter(n => n.to === me.id).reverse(); r
 V.admin = () => { const tab = arg || 'reports', act = db.requests.filter(r => r.status === 'open').length;
   const tb = (h, rows) => `<div style="overflow-x:auto"><table><tr>${h.map(x => `<th>${x}</th>`).join('')}</tr>${rows.map(r => `<tr>${r.map(c => `<td>${esc(c)}</td>`).join('')}</tr>`).join('')}</table></div>`;
   const body = tab === 'farmers' ? tb(['Name', 'Phone', 'Village', 'District'], db.farmers.map(f => [f.name, f.phone, f.village, f.district])) : tab === 'labourers' ? tb(['Name', 'Phone', 'Village', 'Skills', '₹'], db.labourers.map(l => [l.name, l.phone, l.village, l.skills.join(','), l.expectedWage])) : tab === 'requests' ? tb(['Crop', 'Work', 'Need', 'Accepted', 'Village', 'Status'], db.requests.map(r => [r.crop, r.workType, r.labourersRequired, r.acceptedLabourers, r.village, r.status])) : `<div class="card">📈 Acceptances: ${db.acceptances.length}<br>🔔 Notifications: ${db.notifs.length}</div>`;
-  return `<h1>🛠️ ${t('admin')}</h1><div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(150px,1fr))"><div class="card big"><span class="ic">👨‍🌾</span>${t('tF')}<h2>${db.farmers.length}</h2></div><div class="card big"><span class="ic">👷</span>${t('tL')}<h2>${db.labourers.length}</h2></div><div class="card big"><span class="ic">📋</span>${t('aR')}<h2>${act}</h2></div><div class="card big"><span class="ic">✅</span>${t('cR')}<h2>${db.requests.length - act}</h2></div></div>
+  return back('home') + `<h1>🛠️ ${t('admin')}</h1><div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(150px,1fr))"><div class="card big"><span class="ic">👨‍🌾</span>${t('tF')}<h2>${db.farmers.length}</h2></div><div class="card big"><span class="ic">👷</span>${t('tL')}<h2>${db.labourers.length}</h2></div><div class="card big"><span class="ic">📋</span>${t('aR')}<h2>${act}</h2></div><div class="card big"><span class="ic">✅</span>${t('cR')}<h2>${db.requests.length - act}</h2></div></div>
 <div class="tabs">${['farmers', 'labourers', 'requests', 'reports'].map(k => `<button class="btn alt sm" data-go="admin" data-a="${k}">${k === 'reports' ? t('reports') : k}</button>`).join('')}</div>${body}<button class="btn red" data-do="logout">${t('logout')}</button>`; };
 // ---------- actions ----------
 const A = {
